@@ -1,0 +1,33 @@
+package cmd
+
+import (
+	"fmt"
+	"github.com/spf13/cobra"
+	"log"
+	"os/exec"
+)
+
+var udmCmd = &cobra.Command{
+	Use:   "udm",
+	Short: "Manage UDM daemon inside cli container",
+	Long: `Check status of unregister-devices-manager in cli container and start/stop commands
+
+	pwctl udm 		Status of UDM
+	pwctl udm start		Start UDM
+	pwctl udm stop		Stop UDM`,
+
+	Run: func(cmd *cobra.Command, args []string) {
+
+		command := "docker exec -t \"dock_cli_1\" supervisorctl status | grep unregister-devices-manager"
+		println(command)
+		stdoutStderr, err := exec.Command("sh", "-c", command).CombinedOutput()
+		fmt.Printf("%s", stdoutStderr)
+		if err != nil {
+			log.Fatal(err)
+		}
+	},
+}
+
+func init() {
+	rootCmd.AddCommand(udmCmd)
+}

@@ -1,0 +1,5 @@
+package: gitlab.corp.pushwoosh.com/dscheglov/pwctl
+import:
+- package: github.com/spf13/viper
+- package: github.com/spf13/cobra
+
