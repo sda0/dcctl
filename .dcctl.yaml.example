@@ -1,0 +1,3 @@
+project_dock: /path/to/docker/compose/files
+project: /path/to/project/src/
+
