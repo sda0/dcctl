@@ -6,6 +6,7 @@ import (
 	"gitlab.corp.pushwoosh.com/dscheglov/pwctl/powodock"
 	"log"
 	"os/exec"
+	"strings"
 )
 
 var startCmd = &cobra.Command{
@@ -20,6 +21,10 @@ var startCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 
 		composeFiles, servicesList := powodock.GetComposeFilesAndServicesByArg(args)
+
+		if len(servicesList) > 0 && !strings.Contains(servicesList, "nginx") {
+			servicesList += " nginx"
+		}
 
 		command := "docker-compose " + composeFiles + " start " + servicesList
 		println(command)
