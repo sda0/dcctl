@@ -7,7 +7,7 @@ import (
 	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"gitlab.corp.pushwoosh.com/dscheglov/pwctl/powodock"
+	"gitlab.corp.pushwoosh.com/Backend/pwctl/powodock"
 	"log"
 	"os/exec"
 )

@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 	"github.com/spf13/cobra"
-	"gitlab.corp.pushwoosh.com/dscheglov/pwctl/powodock"
+	"gitlab.corp.pushwoosh.com/Backend/pwctl/powodock"
 	"log"
 	"os/exec"
 	"strings"

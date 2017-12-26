@@ -1,24 +1,24 @@
 package powodock
 
 import (
+	"github.com/spf13/viper"
 	"os"
 	"path/filepath"
 	"regexp"
 	"sort"
 	"strings"
-	"github.com/spf13/viper"
 	"sync"
 )
 
 const YmlPattern = "docker-.+ya?ml"
 const DefaultComposeFile = "docker-compose.yml"
 
-
 type composeFiles struct {
-	files []string
-	pattern string
+	files       []string
+	pattern     string
 	defaultFile string
 }
+
 var foundComposeFiles *composeFiles
 var once sync.Once
 
@@ -28,7 +28,7 @@ func GetInstance() *composeFiles {
 		foundComposeFiles.pattern = viper.GetString("composer_pattern")
 		foundComposeFiles.defaultFile = viper.GetString("composer_default")
 		foundComposeFiles.files = FindYmlFiles(viper.GetString("PW_DOCK"))
-		sort.StringSlice(foundComposeFiles.files).Swap(sort.SearchStrings(foundComposeFiles.files, foundComposeFiles.defaultFile ), 0)
+		sort.StringSlice(foundComposeFiles.files).Swap(sort.SearchStrings(foundComposeFiles.files, foundComposeFiles.defaultFile), 0)
 	})
 	return foundComposeFiles
 }
