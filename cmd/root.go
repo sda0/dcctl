@@ -9,31 +9,21 @@ import (
 	"github.com/spf13/viper"
 	"gitlab.corp.pushwoosh.com/Backend/pwctl/powodock"
 	"log"
-	"os/exec"
+	"path/filepath"
 )
 
 var cfgFile string
 
 var rootCmd = &cobra.Command{
 	Use:   "pwctl",
-	Short: "Pushwoosh control pedal",
-	Long:  `Manage your pushwoosh environment like a pro.`,
+	Short: "Pushwoosh control utility",
+	Long:  `Manage your pushwoosh environment like a pro. It is just wrapper around docker-compose. Better place executable file in your PW dock directory and link it by /usr/bin/pwctl.`,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		pwDockDir := viper.GetString("pw_dock")
 		if pwDockDir != "" {
 			if err := os.Chdir(pwDockDir); err != nil {
 				log.Fatal(err)
 			}
-		}
-	},
-	Run: func(cmd *cobra.Command, args []string) {
-		composeFiles, _ := powodock.GetComposeFilesAndServicesByArg([]string{"all"})
-		command := "docker-compose " + composeFiles + " ps"
-		println(command)
-		stdoutStderr, err := exec.Command("sh", "-c", command).CombinedOutput()
-		fmt.Printf("%s", stdoutStderr)
-		if err != nil {
-			log.Fatal(err)
 		}
 	},
 }
@@ -53,11 +43,12 @@ func init() {
 	var ymlPattern string
 	var defaultComposeFile string
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.pwctl.yaml)")
-	rootCmd.PersistentFlags().StringVar(&pwDockDir, "pw_dock", "", "powodock directory path (default is current dir)")
-	rootCmd.PersistentFlags().StringVar(&pwHomeDir, "pw_home", "", "pw home directory path (default is current dir)")
-	rootCmd.PersistentFlags().StringVar(&ymlPattern, "composer_pattern", powodock.YmlPattern, "pw home directory path (default is current dir)")
-	rootCmd.PersistentFlags().StringVar(&defaultComposeFile, "composer_default", powodock.DefaultComposeFile, "pw home directory path (default is current dir)")
+	exe, _ := os.Executable()
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is .env)")
+	rootCmd.PersistentFlags().StringVar(&pwDockDir, "pw_dock", filepath.Dir(exe), "powodock directory path")
+	rootCmd.PersistentFlags().StringVar(&pwHomeDir, "pw_home", "", "pw home directory path")
+	rootCmd.PersistentFlags().StringVar(&ymlPattern, "composer_pattern", powodock.YmlPattern, "pw home directory path")
+	rootCmd.PersistentFlags().StringVar(&defaultComposeFile, "composer_default", powodock.DefaultComposeFile, "pw home directory path")
 
 	viper.BindPFlag("pw_dock", rootCmd.PersistentFlags().Lookup("pw_dock"))
 	viper.BindPFlag("pw_home", rootCmd.PersistentFlags().Lookup("pw_home"))
@@ -81,7 +72,16 @@ func initConfig() {
 
 		// Search config in home directory with name ".pwctl" (without extension).
 		viper.AddConfigPath(home)
+
+		//Find current executable directory
+		exe, err := os.Executable()
+		if err != nil {
+			panic(err)
+		}
+
+		viper.AddConfigPath(filepath.Dir(exe))
 		viper.SetConfigName(".pwctl")
+		viper.SupportedExts = append(viper.SupportedExts, "")
 	}
 
 	viper.AutomaticEnv() // read in environment variables that match

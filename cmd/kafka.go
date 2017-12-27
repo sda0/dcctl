@@ -18,7 +18,7 @@ var kafkaCmd = &cobra.Command{
 
 	Run: func(cmd *cobra.Command, args []string) {
 
-		command := "docker exec -t \"dock_cli_1\" supervisorctl status | grep raker-kafka"
+		command := "container=$(docker ps -f name=_cli_1 -q | head -n1); docker exec -t $container supervisorctl status | grep raker-kafka"
 		println(command)
 		stdoutStderr, err := exec.Command("sh", "-c", command).CombinedOutput()
 		fmt.Printf("%s", stdoutStderr)

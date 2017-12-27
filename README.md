@@ -1,13 +1,16 @@
 # Installation instruction
 ### Build
+build and copy executable file to PW Dock directory
 ```
-go build -o /usr/bin/pwctl main.go
+go build -o /path/to/pw/dock/pwctl main.go
+ln -s /path/to/pw/dock/pwctl /usr/bin/pwctl
 ```
 ### Create your local config file
+This is not required if you placed executable file in correct directory /path/to/pw/dock/
 ```
 cp .pwctl.yaml.example $HOME/.pwctl.yaml
 ```
-### Setup config variables
+Then setup config variables
 ```
 # cat $HOME/.pwctl.yaml
 PW_DOCK=<path to powodock dir>

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"gitlab.corp.pushwoosh.com/Backend/pwctl"
+	"gitlab.corp.pushwoosh.com/Backend/pwctl/cmd"
 )
 
 func main() {
