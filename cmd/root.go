@@ -44,7 +44,8 @@ func init() {
 	var ymlPattern string
 	var defaultComposeFile string
 
-	exe, _ := osext.ExecutableFolder()
+	exe := getRealPath()
+
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is .env)")
 	rootCmd.PersistentFlags().StringVar(&pwDockDir, "pw_dock", exe, "powodock directory path")
 	rootCmd.PersistentFlags().StringVar(&pwHomeDir, "pw_home", "", "pw home directory path")
@@ -75,10 +76,7 @@ func initConfig() {
 		viper.AddConfigPath(home)
 
 		//Find current executable directory
-		exe, err := osext.ExecutableFolder()
-		if err != nil {
-			panic(err)
-		}
+		exe := getRealPath()
 
 		viper.AddConfigPath(filepath.Dir(exe))
 		viper.SetConfigName(".pwctl")
@@ -91,4 +89,17 @@ func initConfig() {
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Println("Using config file:", viper.ConfigFileUsed())
 	}
+}
+
+func getRealPath() (string)  {
+	exe, err := osext.Executable()
+	if err != nil {
+		panic(err)
+	}
+
+	ln, err := filepath.EvalSymlinks(exe)
+	if err != nil {
+		panic(err)
+	}
+	return ln;
 }
