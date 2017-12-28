@@ -44,10 +44,10 @@ func init() {
 	var ymlPattern string
 	var defaultComposeFile string
 
-	exe := getRealPath()
+	path := getRealPath()
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is .env)")
-	rootCmd.PersistentFlags().StringVar(&pwDockDir, "pw_dock", exe, "powodock directory path")
+	rootCmd.PersistentFlags().StringVar(&pwDockDir, "pw_dock", path, "powodock directory path")
 	rootCmd.PersistentFlags().StringVar(&pwHomeDir, "pw_home", "", "pw home directory path")
 	rootCmd.PersistentFlags().StringVar(&ymlPattern, "composer_pattern", powodock.YmlPattern, "pw home directory path")
 	rootCmd.PersistentFlags().StringVar(&defaultComposeFile, "composer_default", powodock.DefaultComposeFile, "pw home directory path")
@@ -76,9 +76,9 @@ func initConfig() {
 		viper.AddConfigPath(home)
 
 		//Find current executable directory
-		exe := getRealPath()
+		path := getRealPath()
 
-		viper.AddConfigPath(filepath.Dir(exe))
+		viper.AddConfigPath(path)
 		viper.SetConfigName(".pwctl")
 		viper.SupportedExts = append(viper.SupportedExts, "")
 	}
@@ -101,5 +101,5 @@ func getRealPath() (string)  {
 	if err != nil {
 		panic(err)
 	}
-	return ln;
+	return filepath.Dir(ln)
 }
