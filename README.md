@@ -1,16 +1,22 @@
-# Installation instruction
-### Build
-build and copy executable file to PW Dock directory
+# PWCTL
+
+## Install to PW Dock directory (recommended way)
+
+build executable file to PW Dock directory and symlink by /usr/lib/pwctl:
 ```
-go build -o /path/to/pw/dock/pwctl main.go
-ln -s /path/to/pw/dock/pwctl /usr/bin/pwctl
+go build -o /path_to_pw_dock_dir/pwctl main.go
+ln -s /path_to_pw_dock_dir/pwctl /usr/bin/pwctl
 ```
-### Create your local config file
-This is not required if you placed executable file in correct directory /path/to/pw/dock/
+## Install to any other directory (not recommended way)
+You should build executable file to any path:
+```
+go build -o /any_dir/any_name main.go
+```
+Then create your local config file  $HOME/.pwctl.yaml
 ```
 cp .pwctl.yaml.example $HOME/.pwctl.yaml
 ```
-Then setup config variables
+Then setup config variables in config file
 ```
 # cat $HOME/.pwctl.yaml
 PW_DOCK=<path to powodock dir>
