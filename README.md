@@ -4,8 +4,8 @@
 
 build executable file to PW Dock directory and symlink by /usr/lib/pwctl:
 ```
-go build -o /path_to_pw_dock_dir/pwctl main.go
-ln -s /path_to_pw_dock_dir/pwctl /usr/bin/pwctl
+go build -o ~/path_to_pw_dock_dir/pwctl main.go
+ln -s ~/path_to_pw_dock_dir/pwctl /usr/bin/pwctl
 ```
 ## Install to any other directory (not recommended way)
 You should build executable file to any path:

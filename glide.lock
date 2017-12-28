@@ -1,5 +1,5 @@
-hash: 60d8cd5d1ec27629706ab3f1439a3900dc31164323181154550dd84643e511f4
-updated: 2017-12-26T17:49:50.645162677+07:00
+hash: 7101ca269ed440b0fe575867f533d99ee564c99d3d9e1bc2be732e528b93eac0
+updated: 2017-12-28T16:47:33.827023163+07:00
 imports:
 - name: github.com/fsnotify/fsnotify
   version: 4da3e2cfbabc9f751898f250b49f2439785783a1
@@ -17,6 +17,8 @@ imports:
   - json/token
 - name: github.com/inconshreveable/mousetrap
   version: 76626ae9c91c4f2a10f34cad8ce83ea42c93bb75
+- name: github.com/kardianos/osext
+  version: ae77be60afb1dcacde03767a8c37337fad28ac14
 - name: github.com/magiconair/properties
   version: 49d762b9817ba1c2e9d0c69183c2b4a8b8f1d934
 - name: github.com/mitchellh/go-homedir

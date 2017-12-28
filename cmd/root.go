@@ -7,6 +7,7 @@ import (
 	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"github.com/kardianos/osext"
 	"gitlab.corp.pushwoosh.com/Backend/pwctl/powodock"
 	"log"
 	"path/filepath"
@@ -43,9 +44,9 @@ func init() {
 	var ymlPattern string
 	var defaultComposeFile string
 
-	exe, _ := os.Executable()
+	exe, _ := osext.ExecutableFolder()
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is .env)")
-	rootCmd.PersistentFlags().StringVar(&pwDockDir, "pw_dock", filepath.Dir(exe), "powodock directory path")
+	rootCmd.PersistentFlags().StringVar(&pwDockDir, "pw_dock", exe, "powodock directory path")
 	rootCmd.PersistentFlags().StringVar(&pwHomeDir, "pw_home", "", "pw home directory path")
 	rootCmd.PersistentFlags().StringVar(&ymlPattern, "composer_pattern", powodock.YmlPattern, "pw home directory path")
 	rootCmd.PersistentFlags().StringVar(&defaultComposeFile, "composer_default", powodock.DefaultComposeFile, "pw home directory path")
@@ -74,7 +75,7 @@ func initConfig() {
 		viper.AddConfigPath(home)
 
 		//Find current executable directory
-		exe, err := os.Executable()
+		exe, err := osext.ExecutableFolder()
 		if err != nil {
 			panic(err)
 		}
