@@ -1,63 +1,63 @@
-# PWCTL
+# Docker compose control utility
 
-## Install to PW Dock directory (recommended way)
+## Install to Dock directory (recommended way)
 
-build executable file to PW Dock directory and symlink by /usr/lib/pwctl:
+build executable file to Dock directory and symlink by /usr/lib/dcctl:
 ```
-go build -o ~/path_to_pw_dock_dir/pwctl main.go
-ln -s ~/path_to_pw_dock_dir/pwctl /usr/bin/pwctl
+go build -o ~/path_to_dock_dir/dcctl main.go
+ln -s ~/path_to_dock_dir/dcctl /usr/bin/dcctl
 ```
 ## Install to any other directory (not recommended way)
 You should build executable file to any path:
 ```
 go build -o /any_dir/any_name main.go
 ```
-Then create your local config file  $HOME/.pwctl.yaml
+Then create your local config file  $HOME/.dcctl.yaml
 ```
-cp .pwctl.yaml.example $HOME/.pwctl.yaml
+cp .dcctl.yaml.example $HOME/.dcctl.yaml
 ```
 Then setup config variables in config file
 ```
-# cat $HOME/.pwctl.yaml
-PW_DOCK=<path to powodock dir>
-PW_HOME=<path to pw home dir>
+# cat $HOME/.dcctl.yaml
+project_dock=<path to dock dir>
+project=<path to project src dir>
 ```
 # How to use
 ## How to add new service containers
-You should create new docker-<servicename>.yml file in your powodock dir.
-Thats enough.
+You should create new docker-<servicename>.yml file in your dock dir.
+That's enough.
 
 ## Commands
 - Show service containers launched
 ```
-pwctl
+dcctl
 ```
-- Up general services (nginx, web, api, cli, redis, rabbit, pg)
+- Up general services (nginx and all links from it)
 ```
-pwctl up
+dcctl up
 ```
 
-- Start general services (nginx, web, api, cli, redis, rabbit, pg)
+- Start general services (nginx and all links from it)
 ```
-pwctl start
+dcctl start
 ```
 
 - Stop all launched service containers
 ```
-pwctl stop
+dcctl stop
 ```
 
 - Down all launched service containers
 ```
-pwctl down
+dcctl down
 ```
 
 - Start some service (it may launch general services if any of these stopped)
 ```
-pwctl start inapp
+dcctl start inapp
 ```
 
 - Stop general services + some additional service
 ```
-pwctl stop inapp
+dcctl stop inapp
 ```

@@ -1,4 +1,4 @@
-package: gitlab.corp.pushwoosh.com/Backend/pwctl
+package: github.com/sda0/dcctl
 import:
 - package: github.com/spf13/viper
 - package: github.com/spf13/cobra

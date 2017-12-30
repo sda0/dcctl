@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 	"github.com/spf13/cobra"
-	"gitlab.corp.pushwoosh.com/Backend/pwctl/powodock"
+	"../docker"
 	"log"
 	"os/exec"
 	"strings"
@@ -24,7 +24,7 @@ Options:
                         for each container.
 `,
 	Run: func(cmd *cobra.Command, args []string) {
-		composeFiles, _ := powodock.GetComposeFilesAndServicesByArg([]string{"all"})
+		composeFiles, _ := docker.GetComposeFilesAndServicesByArg([]string{"all"})
 		command := "docker-compose " + composeFiles + " logs " + strings.Join(args, " ")
 		println(command)
 		stdoutStderr, err := exec.Command("sh", "-c", command).CombinedOutput()
