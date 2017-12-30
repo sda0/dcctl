@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/sda0/dcctl/docker"
+	"../docker"
 	"github.com/spf13/cobra"
 	"log"
 	"os/exec"

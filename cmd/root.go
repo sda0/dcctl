@@ -5,18 +5,19 @@ import (
 	"os"
 
 	"github.com/mitchellh/go-homedir"
-	"github.com/sda0/dcctl/docker"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"github.com/kardianos/osext"
+	"./docker"
 	"log"
-	"os/exec"
+	"path/filepath"
 )
 
 var cfgFile string
 
 var rootCmd = &cobra.Command{
 	Use:   "dcctl",
-	Short: "Docker-compose control pedal",
+	Short: "Docker-compose control utility",
 	Long:  `Manage your docker compose.`,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		dockDir := viper.GetString("project_dock")
@@ -24,16 +25,6 @@ var rootCmd = &cobra.Command{
 			if err := os.Chdir(dockDir); err != nil {
 				log.Fatal(err)
 			}
-		}
-	},
-	Run: func(cmd *cobra.Command, args []string) {
-		composeFiles, _ := docker.GetComposeFilesAndServicesByArg([]string{"all"})
-		command := "docker-compose " + composeFiles + " ps"
-		println(command)
-		stdoutStderr, err := exec.Command("sh", "-c", command).CombinedOutput()
-		fmt.Printf("%s", stdoutStderr)
-		if err != nil {
-			log.Fatal(err)
 		}
 	},
 }
@@ -53,8 +44,10 @@ func init() {
 	var ymlPattern string
 	var defaultComposeFile string
 
+	path := getRealPath()
+
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.dcctl.yaml)")
-	rootCmd.PersistentFlags().StringVar(&dockDir, "project_dock", "", "docker-compose directory path (default is current dir)")
+	rootCmd.PersistentFlags().StringVar(&dockDir, "project_dock", path, "docker-compose directory path (default is current dir)")
 	rootCmd.PersistentFlags().StringVar(&srcDir, "project", "", "project source files directory path")
 	rootCmd.PersistentFlags().StringVar(&ymlPattern, "composer_pattern", docker.YmlPattern, "docker-compose files pattern")
 	rootCmd.PersistentFlags().StringVar(&defaultComposeFile, "composer_default", docker.DefaultComposeFile, "default docker-compose file name")
@@ -79,9 +72,15 @@ func initConfig() {
 			os.Exit(1)
 		}
 
-		// Search config in home directory with name ".dcctl" (without extension).
+		// Search config in home directory with name ".pwctl" (without extension).
 		viper.AddConfigPath(home)
+
+		//Find current executable directory
+		path := getRealPath()
+
+		viper.AddConfigPath(path)
 		viper.SetConfigName(".dcctl")
+		viper.SupportedExts = append(viper.SupportedExts, "")
 	}
 
 	viper.AutomaticEnv() // read in environment variables that match
@@ -90,4 +89,17 @@ func initConfig() {
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Println("Using config file:", viper.ConfigFileUsed())
 	}
+}
+
+func getRealPath() (string)  {
+	exe, err := osext.Executable()
+	if err != nil {
+		panic(err)
+	}
+
+	ln, err := filepath.EvalSymlinks(exe)
+	if err != nil {
+		panic(err)
+	}
+	return filepath.Dir(ln)
 }

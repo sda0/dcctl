@@ -1,54 +1,63 @@
-# Installation instruction
-### Build
+# PWCTL
+
+## Install to PW Dock directory (recommended way)
+
+build executable file to PW Dock directory and symlink by /usr/lib/pwctl:
 ```
-go build -o /usr/bin/dcctl main.go
+go build -o ~/path_to_pw_dock_dir/pwctl main.go
+ln -s ~/path_to_pw_dock_dir/pwctl /usr/bin/pwctl
 ```
-### Create your local config file
+## Install to any other directory (not recommended way)
+You should build executable file to any path:
 ```
-cp .dcctl.yaml.example $HOME/.dcctl.yaml
+go build -o /any_dir/any_name main.go
 ```
-### Setup config variables
+Then create your local config file  $HOME/.pwctl.yaml
 ```
-# cat $HOME/.dcctl.yaml
-project_dock: /path/to/docker/compose/files
-project: /path/to/project/src/
+cp .pwctl.yaml.example $HOME/.pwctl.yaml
+```
+Then setup config variables in config file
+```
+# cat $HOME/.pwctl.yaml
+PW_DOCK=<path to powodock dir>
+PW_HOME=<path to pw home dir>
 ```
 # How to use
 ## How to add new service containers
-You should create new docker-<servicename>.yml file in your project docker dir.
+You should create new docker-<servicename>.yml file in your powodock dir.
 Thats enough.
 
 ## Commands
 - Show service containers launched
 ```
-dcctl
+pwctl
 ```
-- Up general services (services listed in docker_compose.yaml file)
+- Up general services (nginx, web, api, cli, redis, rabbit, pg)
 ```
-dcctl up
+pwctl up
 ```
 
-- Start general services (services listed in docker_compose.yaml file)
+- Start general services (nginx, web, api, cli, redis, rabbit, pg)
 ```
-dcctl start
+pwctl start
 ```
 
 - Stop all launched service containers
 ```
-dcctl stop
+pwctl stop
 ```
 
 - Down all launched service containers
 ```
-dcctl down
+pwctl down
 ```
 
 - Start some service (it may launch general services if any of these stopped)
 ```
-dcctl start inapp
+pwctl start inapp
 ```
 
 - Stop general services + some additional service
 ```
-dcctl stop inapp
+pwctl stop inapp
 ```

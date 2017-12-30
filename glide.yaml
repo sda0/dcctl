@@ -1,5 +1,5 @@
-package: github.com/sda0/dcctl
+package: gitlab.corp.pushwoosh.com/Backend/pwctl
 import:
 - package: github.com/spf13/viper
 - package: github.com/spf13/cobra
-
+- package: github.com/kardianos/osext
